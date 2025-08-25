@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>System Dashboard</title>
+  <meta name="description" content="Enterprise System Management Dashboard">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --background: hsl(0, 0%, 100%);
+      --foreground: hsl(0, 0%, 9%);
+      --system-id: hsl(0, 0%, 64%);
+      --system-name: hsl(0, 0%, 20%);
+      --accent-blue: hsl(217, 91%, 60%);
+      --card-bg: hsl(0, 0%, 100%);
+      --card-hover: hsl(0, 0%, 98%);
+      --border: hsl(0, 0%, 90%);
+      --muted-foreground: hsl(0, 0%, 64%);
+      --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1),
+                     0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+                      0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-glow: 0 0 0 1px hsl(217, 91%, 60%, 0.15),
+                     0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .top-header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .top-header img {
+      height: 36px;
+    }
+    .top-header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+
+    /* Filter buttons */
+    .filters {
+      display: flex;
+      gap: 1rem;
+    }
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+      color: var(--system-name);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .filter-btn.active {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    /* Content */
+    .container {
+      max-width: 84rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .header p {
+      color: var(--muted-foreground);
+      font-size: 1rem;
+    }
+
+    /* System Grid */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .system-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      text-align: left;
+    }
+    .system-card:hover {
+      background-color: var(--card-hover);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-2px);
+    }
+    .system-id {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--system-id);
+      margin-bottom: 0.5rem;
+    }
+    .system-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--system-name);
+    }
+    .system-card:hover .system-id,
+    .system-card:hover .system-name {
+      color: var(--accent-blue);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Top Header with Logo + Filters -->
+  <div class="top-header">
+    <div class="logo">
+      <img src="/saa-black-logo.png" alt="Logo">
+      <!-- <h1>System Dashboard</h1> -->
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterSystems('all')">All</button>
+      <button class="filter-btn" onclick="filterSystems('website')">Website</button>
+      <button class="filter-btn" onclick="filterSystems('application')">Application</button>
+      <button class="filter-btn" onclick="filterSystems('database')">Database</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="header">
+      <h2>Manage Your Enterprise Systems</h2>
+      <p>Select a category filter to view systems</p>
+    </div>
+
+    <div class="systems-grid">
+      <!-- Example Systems -->
+      <!-- System Buttons -->
+<button class="system-card" data-category="website" onclick="handleSystemClick('SAA 014','SAA Website Mgmt')">
+    <div class="system-id">SAA 014</div>
+    <div class="system-name">SAA Website Mgmt</div>
+  </button>
+  
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 015','ADS Website Mgmt')">
+    <div class="system-id">SAA 015</div>
+    <div class="system-name">ADS Website Mgmt</div>
+  </button>
+  
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 016','HOST TJN WebApp')">
+    <div class="system-id">SAA 016</div>
+    <div class="system-name">HOST TJN WebApp</div>
+  </button>
+  
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 018','ADS Academic + ADS Faculty')">
+    <div class="system-id">SAA 018</div>
+    <div class="system-name">ADS Academic</div>
+  </button>
+
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 018','ADS Academic + ADS Faculty')">
+    <div class="system-id">SAA 018</div>
+    <div class="system-name">ADS Faculty</div>
+  </button>
+  
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 020','SHR Human Resource + Onboarding - Offboarding')">
+    <div class="system-id">SAA 020</div>
+    <div class="system-name">SHR Human Resource</div>
+  </button>
+
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 020','SHR Human Resource + Onboarding - Offboarding')">
+    <div class="system-id">SAA 020</div>
+    <div class="system-name">Onboarding - Offboarding</div>
+  </button>
+  
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 025','CoBi Contract Bidding')">
+    <div class="system-id">SAA 025</div>
+    <div class="system-name">CoBi Contract Bidding</div>
+  </button>
+  
+  <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 026','PMO')">
+    <div class="system-id">SAA 026</div>
+    <div class="system-name">PMO</div>
+  </button>
+
+    <!-- Websites PCB -->
+
+    <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 007','AMS Academy Management Application')">
+        <div class="system-id">SAA 007</div>
+        <div class="system-name">AMS Academy Management Application</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 008','GRO Grocery Application')">
+        <div class="system-id">SAA 008</div>
+        <div class="system-name">GRO Grocery Application</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 009','EMR Electronic Medical Record')">
+        <div class="system-id">SAA 009</div>
+        <div class="system-name">EMR Electronic Medical Record</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 011','VIBE Data Platform')">
+        <div class="system-id">SAA 011</div>
+        <div class="system-name">VIBE Data Platform</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 017','PRO Real Estate WebApp')">
+        <div class="system-id">SAA 017</div>
+        <div class="system-name">PRO Real Estate WebApp</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 033','AAI Agentic AI')">
+        <div class="system-id">SAA 033</div>
+        <div class="system-name">AAI Agentic AI</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 034','TeMP Tender Management Platform')">
+        <div class="system-id">SAA 034</div>
+        <div class="system-name">TeMP Tender Management Platform</div>
+      </button>
+      
+      <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 035','VDoc Vibe Doc')">
+        <div class="system-id">SAA 035</div>
+        <div class="system-name">VDoc Vibe Doc</div>
+      </button>
+
+      <!-- Applications PCB -->
+
+      <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 002','BRTC Real Time Connection')">
+        <div class="system-id">SAA 002</div>
+        <div class="system-name">BRTC Real Time Connection</div>
+      </button>
+      
+      <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 013','BEng Bedrock Engine')">
+        <div class="system-id">SAA 013</div>
+        <div class="system-name">BEng Bedrock Engine</div>
+      </button>
+      
+      <button class="system-card" data-category="database" onclick="handleSystemClick('NA','NA')">
+        <div class="system-id">NA</div>
+        <div class="system-name">Open Property</div>
+      </button>
+      
+      <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 031','DP Dynamic Planner')">
+        <div class="system-id">SAA 031</div>
+        <div class="system-name">DP Dynamic Planner</div>
+      </button>
+      
+      <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 032','FDP Federated Data Platform')">
+        <div class="system-id">SAA 032</div>
+        <div class="system-name">FDP Federated Data Platform</div>
+      </button>
+      
+      <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 036','LNWH London North West Hospital')">
+        <div class="system-id">SAA 036</div>
+        <div class="system-name">LNWH London North West Hospital</div>
+      </button>
+      
+      <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 037','REV NHS Revolution')">
+        <div class="system-id">SAA 037</div>
+        <div class="system-name">REV NHS Revolution</div>
+      </button>
+      
+      
+    </div>
+  </div>
+
+  <script>
+    function handleSystemClick(systemId, systemName) {
+    // Map each system to its link
+    const systemLinks = {
+      "SAA 011": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s35b558dae982412f8ab9fba9b9d7cb40&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 015": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s1ec69d3bd3534abc8bcc8c7bcebbdc09&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 008": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sdc411757147647e0b772f474d8b843b9&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 016": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sdc411757147647e0b772f474d8b843b9&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 018": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s50712cca43584a0fbc351e9b4bdb6718&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 020": "https://onedrive.live.com/?id=81F20D8582D62D8B%21saaa4fda6346044489e9f3985a86dd412&cid=81F20D8582D62D8B&sb=name&sd=1&view=0",
+      "SAA 007": "https://1drv.ms/x/c/81f20d8582d62d8b/EZDg5HgXE7hMrOskmT3jmQ0BmOYpJn4YV-buWjUhEeyP-w?e=bdXNgb",
+      "SAA 026": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s780ec487f6024dcf9c8d05733b61d6d7&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 014": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sd55b574fffbe4de391658bc4cedbf766&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 008": "https://1drv.ms/x/c/81f20d8582d62d8b/EVnGrtse00pPgNO7Xx4vPGMBvY7dJ3jDEYhcLdM4GpC0vA?e=OyNH54",
+      "SAA 031": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s2ec0e9f17cdb4d0b803d8fa3f0667937&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "NA": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s4e9496a6902d47c18315862df51faa0a&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 032": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s0c20a37b424646b89414a3a754c1f6c1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 033": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sba1da63b754241028c1f8120f6eb71f1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 034": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s5ac24c6afa8c4fd48acc362fbe32cfaa&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 035": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sf19fe99d79bf4f97a5c449c2376934ee&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 017": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s0290c505dbe145c098c2a77567a0b3f1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "SAA 013": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sf2594780b9584cfaba51179cc73b347c&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      // You can add more like this:
+      
+    };
+
+    // If link exists for the systemId, redirect
+    if (systemLinks[systemId]) {
+      window.open(systemLinks[systemId], "_blank"); // Opens in new tab
+    } else {
+      alert(systemName + " (" + systemId + ") has no link assigned yet.");
+    }
+  }
+
+    function filterSystems(category) {
+      // Update active filter button
+      document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+      event.target.classList.add("active");
+
+      // Filter cards
+      document.querySelectorAll(".system-card").forEach(card => {
+        if (category === "all" || card.dataset.category === category) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
