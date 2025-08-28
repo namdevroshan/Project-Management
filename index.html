@@ -1,14 +1,11 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>System Dashboard</title>
-  <meta name="description" content="Enterprise System Management Dashboard">
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Card</title>
   <style>
+    /* Global Styles & Variables */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -117,257 +114,433 @@
       gap: 1.5rem;
     }
 
+
+
+
+
+
+
+
+    /* Card Container */
     .system-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      padding: 1.5rem;
-      box-shadow: var(--shadow-soft);
+      width: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      overflow: hidden;
+      background: white;
+      border: none;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
       text-align: left;
+      padding: 0;
     }
-    .system-card:hover {
-      background-color: var(--card-hover);
-      box-shadow: var(--shadow-glow);
-      transform: translateY(-2px);
+
+    /* Header (Red Bar) */
+    .system-card .card-header {
+      background: #003e6b; /* red */
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: bold;
     }
-    .system-id {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--system-id);
-      margin-bottom: 0.5rem;
-    }
-    .system-name {
-      font-size: 1rem;
+
+    .system-card .system-id {
       font-weight: 600;
-      color: var(--system-name);
-    }
-    .system-card:hover .system-id,
-    .system-card:hover .system-name {
-      color: var(--accent-blue);
     }
 
-    .system-owner {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--muted-foreground);
-  margin-top: 0.3rem;
-}
-.system-card:hover .system-owner {
-  color: var(--accent-blue);
+    .system-card .system-status {
+      font-weight: 500;
+    }
+
+    /* Middle Section (Description/Name) */
+    .system-card .system-name {
+      padding: 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #444;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Footer (Owner + Last Updated style) */
+    .system-card .system-owner {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #000000;
+    }
+    /* Hover Effects */
+.system-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(235, 87, 87, 0.3);
 }
 
-.system-status {
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-top: 10px;
-  padding: 2px 6px;
-  border-radius: 6px;
-  display: inline-block;
+.system-card:hover::before {
+  opacity: 1;
+  background-position: 100% 0;
 }
 
-/* Status Colors */
-.system-status.ongoing {
-  background: #e0f2fe;
-  color: #0284c7;
-}
-.system-status.completed {
-  background: #dcfce7;
-  color: #16a34a;
-}
-.system-status.pending {
-  background: #fef9c3;
-  color: #ca8a04;
-}
-.system-status.delayed {
-  background: #fee2e2;
-  color: #dc2626;
+.system-card:hover .card-header {
+  background: linear-gradient(90deg, #003e6b);
 }
 
-
+.system-card:hover .system-name {
+  color: #222;
+}
   </style>
 </head>
 <body>
+    <div class="top-header">
+        <div class="logo">
+          <img src="/saa-black-logo.png" alt="Logo">
+        </div>
+        <!-- <div class="filters">
+          <button class="filter-btn active" onclick="filterSystems('all')">All</button>
+          <button class="filter-btn" onclick="filterSystems('website')">Website</button>
+          <button class="filter-btn" onclick="filterSystems('application')">Application</button>
+          <button class="filter-btn" onclick="filterSystems('database')">Database</button>
+        </div> -->
+      </div>
+    
+      <div class="container">
+        <div class="header">
+          <h2>PCB Management</h2>
+          <p>Select a category filter to view systems</p>
+        </div>
 
-  <!-- Top Header with Logo + Filters -->
-  <div class="top-header">
-    <div class="logo">
-      <img src="/saa-black-logo.png" alt="Logo">
-    </div>
-    <div class="filters">
-      <button class="filter-btn active" onclick="filterSystems('all')">All</button>
-      <button class="filter-btn" onclick="filterSystems('website')">Website</button>
-      <button class="filter-btn" onclick="filterSystems('application')">Application</button>
-      <button class="filter-btn" onclick="filterSystems('database')">Database</button>
-    </div>
-  </div>
-
-  <!-- Content -->
-  <div class="container">
-    <div class="header">
-      <h2>Manage Your Enterprise Systems</h2>
-      <p>Select a category filter to view systems</p>
-    </div>
-
-    <div class="systems-grid">
-      <!-- keep your same system buttons here -->
-      <!-- (unchanged from your version) -->
-      <!-- ... -->
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 014','SAA Website Mgmt')">
-        <div class="system-id">SAA 014</div>
-        <div class="system-name">SAA Website Mgmt</div>
-        <br>
-        <div class="system-owner">Owner: Sarah Ahmed</div>
-        <div class="system-status ongoing">Status: Ongoing</div>
-      </button>
-      
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 015','ADS Website Mgmt')">
-        <div class="system-id">SAA 015</div>
-        <div class="system-name">ADS Website Mgmt</div>
-      </button>
-      
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 016','HOST TJN WebApp')">
-        <div class="system-id">SAA 016</div>
-        <div class="system-name">HOST TJN WebApp</div>
-      </button>
-      
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 018','ADS Academic + ADS Faculty')">
-        <div class="system-id">SAA 018</div>
-        <div class="system-name">ADS Academic</div>
-      </button>
-    
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 018','ADS Academic + ADS Faculty')">
-        <div class="system-id">SAA 018</div>
-        <div class="system-name">ADS Faculty</div>
-      </button>
-      
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 020','SHR Human Resource + Onboarding - Offboarding')">
-        <div class="system-id">SAA 020</div>
-        <div class="system-name">SHR Human Resource</div>
-      </button>
-    
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 020','SHR Human Resource + Onboarding - Offboarding')">
-        <div class="system-id">SAA 020</div>
-        <div class="system-name">Onboarding - Offboarding</div>
-      </button>
-      
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 025','CoBi Contract Bidding')">
-        <div class="system-id">SAA 025</div>
-        <div class="system-name">CoBi Contract Bidding</div>
-      </button>
-      
-      <button class="system-card" data-category="website" onclick="handleSystemClick('SAA 026','PMO')">
-        <div class="system-id">SAA 026</div>
-        <div class="system-name">PMO</div>
-      </button>
-    
-        <!-- Websites PCB -->
-    
-        <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 007','AMS Academy Management Application')">
-            <div class="system-id">SAA 007</div>
-            <div class="system-name">AMS Academy Management Application</div>
+    <div class="systems-grid" >
+        <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0034','Tender Management')">
+            <div class="card-header">
+              <span class="system-id">PRO0034</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Tender Management</div>
+            <div class="system-owner">Raj Mewada</div>
           </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 008','GRO Grocery Application')">
-            <div class="system-id">SAA 008</div>
-            <div class="system-name">GRO Grocery Application</div>
-          </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 009','EMR Electronic Medical Record')">
-            <div class="system-id">SAA 009</div>
-            <div class="system-name">EMR Electronic Medical Record</div>
-          </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 011','VIBE Data Platform')">
-            <div class="system-id">SAA 011</div>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0010','VIBE Data Platform')">
+            <div class="card-header">
+              <span class="system-id">PRO0010</span>
+              <span class="system-status">ONGOING</span>
+            </div>
             <div class="system-name">VIBE Data Platform</div>
+            <div class="system-owner">Pradhumn Kumar</div>
           </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 017','PRO Real Estate WebApp')">
-            <div class="system-id">SAA 017</div>
-            <div class="system-name">PRO Real Estate WebApp</div>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0033','Agentic AI')">
+            <div class="card-header">
+              <span class="system-id">PRO0033</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Agentic AI</div>
+            <div class="system-owner">Pradhumn Kumar</div>
           </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 033','AAI Agentic AI')">
-            <div class="system-id">SAA 033</div>
-            <div class="system-name">AAI Agentic AI</div>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0016','TJN WebApp')">
+            <div class="card-header">
+              <span class="system-id">PRO0016</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">TJN WebApp</div>
+            <div class="system-owner">Rajesh Pathekar</div>
           </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 034','TeMP Tender Management Platform')">
-            <div class="system-id">SAA 034</div>
-            <div class="system-name">TeMP Tender Management Platform</div>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0035','AI Document Management Platform (Vibe Doc)')">
+            <div class="card-header">
+              <span class="system-id">PRO0035</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">AI Document Management Platform (Vibe Doc)</div>
+            <div class="system-owner">Abhishek Gehlot</div>
           </button>
-          
-          <button class="system-card" data-category="application" onclick="handleSystemClick('SAA 035','VDoc Vibe Doc')">
-            <div class="system-id">SAA 035</div>
-            <div class="system-name">VDoc Vibe Doc</div>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0031','Dynamic Planner')">
+            <div class="card-header">
+              <span class="system-id">PRO0031</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Dynamic Planner <br><br></div>
+            <div class="system-owner">Jeevan Kumar</div>
           </button>
-    
-          <!-- Applications PCB -->
-    
-          <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 002','BRTC Real Time Connection')">
-            <div class="system-id">SAA 002</div>
-            <div class="system-name">BRTC Real Time Connection</div>
-          </button>
-          
-          <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 013','BEng Bedrock Engine')">
-            <div class="system-id">SAA 013</div>
-            <div class="system-name">BEng Bedrock Engine</div>
-          </button>
-          
-          <button class="system-card" data-category="database" onclick="handleSystemClick('NA','NA')">
-            <div class="system-id">NA</div>
-            <div class="system-name">Open Property</div>
-          </button>
-          
-          <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 031','DP Dynamic Planner')">
-            <div class="system-id">SAA 031</div>
-            <div class="system-name">DP Dynamic Planner</div>
-          </button>
-          
-          <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 032','FDP Federated Data Platform')">
-            <div class="system-id">PRO0032</div>
-            <div class="system-name">FDP Federated Data Platform</div>
-            <br>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0032','Federated Data Platform')">
+            <div class="card-header">
+              <span class="system-id">PRO0032</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Federated Data Platform<br><br></div>
             <div class="system-owner">Gitendra Singh Sisodiya</div>
-            <div class="system-status ongoing">Status: Ongoing</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0036','London Ambulance')">
+            <div class="card-header">
+              <span class="system-id">PRO0036</span>
+              <span class="system-status">To Be Started</span>
+            </div>
+            <div class="system-name">London Ambulance<br><br></div>
+            <div class="system-owner">Veerendra Patel</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0037','NHS Resolution')">
+            <div class="card-header">
+              <span class="system-id">PRO0037</span>
+              <span class="system-status">To Be Started</span>
+            </div>
+            <div class="system-name">NHS Resolution</div>
+            <div class="system-owner">Nitin verma</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0008','Grocery Application')">
+            <div class="card-header">
+              <span class="system-id">PRO0008</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Grocery Application</div>
+            <div class="system-owner">Raj Mewada</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0014','Website Management (SAA + ART + Vibe)')">
+            <div class="card-header">
+              <span class="system-id">PRO0014</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Website Management (SAA + ART + Vibe)</div>
+            <div class="system-owner">Roshan Namdev</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0017','SAA PRO Real Estate WebApp')">
+            <div class="card-header">
+              <span class="system-id">PRO0017</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">SAA PRO Real Estate WebApp</div>
+            <div class="system-owner">Abhishek Gehlot</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0002','Bedrock Real Time Connection')">
+            <div class="card-header">
+              <span class="system-id">PRO0002</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Bedrock Real Time Connection<br><br></div>
+            <div class="system-owner">Mohd. Amin</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0007','Academy Management System - Application')">
+            <div class="card-header">
+              <span class="system-id">PRO0007</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Academy Management System - Application</div>
+            <div class="system-owner">Sheikh Monis</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0009','Electronic Medical Record (Waldenstrom\'s Macroglobulinaemia)')">
+            <div class="card-header">
+              <span class="system-id">PRO0009</span>
+              <span class="system-status">ON HOLD</span>
+            </div>
+            <div class="system-name">Electronic Medical Record (Waldenstrom's Macroglobulinaemia)</div>
+            <div class="system-owner">Prabhakar Azad</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0013','Bedrock Engine')">
+            <div class="card-header">
+              <span class="system-id">PRO0013</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Bedrock Engine<br><br></div>
+            <div class="system-owner">Sheikh Monis</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0015','Website Management (ADS)')">
+            <div class="card-header">
+              <span class="system-id">PRO0015</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Website Management (ADS) <br><br></div>
+            <div class="system-owner">Rajesh Pathekar</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0018','ADS Human Resource')">
+            <div class="card-header">
+              <span class="system-id">PRO0018</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">ADS Human Resource <br><br></div>
+            <div class="system-owner">Nikita Jhala</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0020','SAA Human Resource & Digital Marketing')">
+            <div class="card-header">
+              <span class="system-id">PRO0020</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">SAA Human Resource & Digital Marketing</div>
+            <div class="system-owner">Nikita Jhala</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0025','Contract Management')">
+            <div class="card-header">
+              <span class="system-id">PRO0025</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Contract Management<br><br></div>
+            <div class="system-owner">Harpreet Kaur</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0026','Project Management')">
+            <div class="card-header">
+              <span class="system-id">PRO0026</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Project Management</div>
+            <div class="system-owner">Harpreet Kaur</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0030','Open Property (Website)')">
+            <div class="card-header">
+              <span class="system-id">PRO0030</span>
+              <span class="system-status">ONGOING</span>
+            </div>
+            <div class="system-name">Open Property (Website)</div>
+            <div class="system-owner">Pradeep Yadav</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0001','Bedrock Datawarehouse')">
+            <div class="card-header">
+              <span class="system-id">PRO0001</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Bedrock Datawarehouse</div>
+            <div class="system-owner">Veerendra Patel</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0003','Tina KPI Development (London)')">
+            <div class="card-header">
+              <span class="system-id">PRO0003</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Tina KPI Development (London)</div>
+            <div class="system-owner">Neeraj Nath</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0004','Export Control Web Development')">
+            <div class="card-header">
+              <span class="system-id">PRO0004</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Export Control Web Development</div>
+            <div class="system-owner">Pradhumn Kumar</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0005','Tool Box Documentation')">
+            <div class="card-header">
+              <span class="system-id">PRO0005</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Tool Box Documentation</div>
+            <div class="system-owner">Sheikh Monis</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0006','Guy\'s and St Thomas Trust')">
+            <div class="card-header">
+              <span class="system-id">PRO0006</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Guy's and St Thomas Trust</div>
+            <div class="system-owner">Nitin Verma</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0011','Leeds Trust Hospital - VIBE')">
+            <div class="card-header">
+              <span class="system-id">PRO0011</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Leeds Trust Hospital - VIBE</div>
+            <div class="system-owner">Nitin Verma</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0012','Bedrock Service Monitor')">
+            <div class="card-header">
+              <span class="system-id">PRO0012</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Bedrock Service Monitor</div>
+            <div class="system-owner">Sheikh Monis</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0021','Firmley')">
+            <div class="card-header">
+              <span class="system-id">PRO0021</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Firmley</div>
+            <div class="system-owner">Mohd. Amin</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0022','Synapse (merged with BRTC)')">
+            <div class="card-header">
+              <span class="system-id">PRO0022</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Synapse (merged with BRTC)</div>
+            <div class="system-owner">Mohd. Amin</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0023','Open Property App')">
+            <div class="card-header">
+              <span class="system-id">PRO0023</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">Open Property App</div>
+            <div class="system-owner">Prabhakar Azad</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0027','TIPS')">
+            <div class="card-header">
+              <span class="system-id">PRO0027</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">TIPS</div>
+            <div class="system-owner">Mohd. Amin</div>
+          </button>
+        
+          <button class="system-card" data-category="project" onclick="handleSystemClick('PRO0029','A+ Website')">
+            <div class="card-header">
+              <span class="system-id">PRO0029</span>
+              <span class="system-status">COMPLETED</span>
+            </div>
+            <div class="system-name">A+ Website</div>
+            <div class="system-owner">Prabhakar Azad</div>
           </button>
           
-          <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 036','LNWH London North West Hospital')">
-            <div class="system-id">SAA 036</div>
-            <div class="system-name">LNWH London North West Hospital</div>
-          </button>
-          
-          <button class="system-card" data-category="database" onclick="handleSystemClick('SAA 037','REV NHS Revolution')">
-            <div class="system-id">SAA 037</div>
-            <div class="system-name">REV NHS Revolution</div>
-          </button>
-          
-          
-    </div>
-  </div>
+ </div>
 
-  <script>
+ <script>
+
     function handleSystemClick(systemId, systemName) {
       const systemLinks = {
-        "SAA 011": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s35b558dae982412f8ab9fba9b9d7cb40&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 015": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s1ec69d3bd3534abc8bcc8c7bcebbdc09&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 008": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sdc411757147647e0b772f474d8b843b9&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 016": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sdc411757147647e0b772f474d8b843b9&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 018": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s50712cca43584a0fbc351e9b4bdb6718&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 020": "https://onedrive.live.com/?id=81F20D8582D62D8B%21saaa4fda6346044489e9f3985a86dd412&cid=81F20D8582D62D8B&sb=name&sd=1&view=0",
-      "SAA 007": "https://1drv.ms/x/c/81f20d8582d62d8b/EZDg5HgXE7hMrOskmT3jmQ0BmOYpJn4YV-buWjUhEeyP-w?e=bdXNgb",
-      "SAA 026": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s780ec487f6024dcf9c8d05733b61d6d7&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 014": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sd55b574fffbe4de391658bc4cedbf766&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 008": "https://1drv.ms/x/c/81f20d8582d62d8b/EVnGrtse00pPgNO7Xx4vPGMBvY7dJ3jDEYhcLdM4GpC0vA?e=OyNH54",
-      "SAA 031": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s2ec0e9f17cdb4d0b803d8fa3f0667937&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "NA": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s4e9496a6902d47c18315862df51faa0a&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+        "PRO0002": "",
+      "PRO0007": "https://1drv.ms/x/c/81f20d8582d62d8b/EZDg5HgXE7hMrOskmT3jmQ0BmOYpJn4YV-buWjUhEeyP-w?e=bdXNgb",
+      "PRO0008": "https://1drv.ms/x/c/81f20d8582d62d8b/EVnGrtse00pPgNO7Xx4vPGMBvY7dJ3jDEYhcLdM4GpC0vA?e=OyNH54",
+      "PRO0010": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s35b558dae982412f8ab9fba9b9d7cb40&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0013": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sf2594780b9584cfaba51179cc73b347c&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0014": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sd55b574fffbe4de391658bc4cedbf766&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0015": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s1ec69d3bd3534abc8bcc8c7bcebbdc09&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0016": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sdc411757147647e0b772f474d8b843b9&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0017": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s0290c505dbe145c098c2a77567a0b3f1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0018": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s50712cca43584a0fbc351e9b4bdb6718&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0020": "https://onedrive.live.com/?id=81F20D8582D62D8B%21saaa4fda6346044489e9f3985a86dd412&cid=81F20D8582D62D8B&sb=name&sd=1&view=0",
+      "PRO0026": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s780ec487f6024dcf9c8d05733b61d6d7&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0030": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s4e9496a6902d47c18315862df51faa0a&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0031": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s2ec0e9f17cdb4d0b803d8fa3f0667937&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
       "PRO0032": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s0c20a37b424646b89414a3a754c1f6c1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 033": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sba1da63b754241028c1f8120f6eb71f1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 034": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s5ac24c6afa8c4fd48acc362fbe32cfaa&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 035": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sf19fe99d79bf4f97a5c449c2376934ee&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
-      "SAA 017": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s0290c505dbe145c098c2a77567a0b3f1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0033": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sba1da63b754241028c1f8120f6eb71f1&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0034": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!s5ac24c6afa8c4fd48acc362fbe32cfaa&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
+      "PRO0035": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sf19fe99d79bf4f97a5c449c2376934ee&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
       "SAA 013": "https://onedrive.live.com/personal/81f20d8582d62d8b/_layouts/15/Doc.aspx?resid=81F20D8582D62D8B!sf2594780b9584cfaba51179cc73b347c&cid=81f20d8582d62d8b&migratedtospo=true&app=Excel",
         // (your same links here)
       };
@@ -390,19 +563,19 @@
       });
     }
 
-    // ✅ Sort cards automatically by SAA ID
-    function sortSystemCards() {
-      const grid = document.querySelector(".systems-grid");
-      const cards = Array.from(grid.children);
-      cards.sort((a, b) => {
-        const numA = parseInt(a.querySelector(".system-id").innerText.replace(/\D/g, "")) || 9999;
-        const numB = parseInt(b.querySelector(".system-id").innerText.replace(/\D/g, "")) || 9999;
-        return numA - numB;
-      });
-      cards.forEach(card => grid.appendChild(card)); // re-append in sorted order
-    }
+    // // ✅ Sort cards automatically by SAA ID
+    // function sortSystemCards() {
+    //   const grid = document.querySelector(".systems-grid");
+    //   const cards = Array.from(grid.children);
+    //   cards.sort((a, b) => {
+    //     const numA = parseInt(a.querySelector(".system-id").innerText.replace(/\D/g, "")) || 9999;
+    //     const numB = parseInt(b.querySelector(".system-id").innerText.replace(/\D/g, "")) || 9999;
+    //     return numA - numB;
+    //   });
+    //   cards.forEach(card => grid.appendChild(card)); // re-append in sorted order
+    // }
 
-    window.onload = sortSystemCards;
+    // window.onload = sortSystemCards;
   </script>
 </body>
 </html>
