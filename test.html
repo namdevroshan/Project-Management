@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smooth Drag and Drop Cards</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --background: #fff;
+      --foreground: #111;
+      --accent-blue: #003e6b;
+      --border: #e5e7eb;
+      --muted-foreground: #666;
+      --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --transition: 0.25s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .top-header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-header img {
+      height: 36px;
+    }
+
+    .container {
+      max-width: 84rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--muted-foreground);
+      font-size: 1rem;
+    }
+
+    /* Grid Layout */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Card */
+    .system-card {
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: grab;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .system-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .system-card:active {
+      cursor: grabbing;
+    }
+
+    .system-card.dragging {
+      opacity: 0.6;
+      transform: scale(1.03);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Card Header */
+    .card-header {
+      background: var(--accent-blue);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .system-name {
+      padding: 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #444;
+      border-bottom: 1px solid #eee;
+    }
+
+    .system-owner {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #000;
+      text-align: right;
+    }
+
+    /* Placeholder */
+    .placeholder {
+      border: 2px dashed var(--accent-blue);
+      border-radius: 10px;
+      background: rgba(0, 62, 107, 0.05);
+      height: 120px;
+      transition: all var(--transition);
+    }
+  </style>
+</head>
+<body>
+  <div class="top-header">
+    <div class="logo">
+      <img src="/saa-black-logo.png" alt="Logo">
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h2>PCB Management</h2>
+      <p>Drag and drop cards to reorder them smoothly</p>
+    </div>
+
+    <div class="systems-grid" id="systemsGrid">
+      <div class="system-card" draggable="true" onclick="handleSystemClick('PRO0034','Tender Management')">
+        <div class="card-header">
+          <span class="system-id">PRO0034</span>
+          <span class="system-status">ONGOING</span>
+        </div>
+        <div class="system-name">Tender Management</div>
+        <div class="system-owner">Raj Mewada</div>
+      </div>
+
+      <div class="system-card" draggable="true" onclick="handleSystemClick('PRO0010','VIBE Data Platform')">
+        <div class="card-header">
+          <span class="system-id">PRO0010</span>
+          <span class="system-status">ONGOING</span>
+        </div>
+        <div class="system-name">VIBE Data Platform</div>
+        <div class="system-owner">Pradhumn Kumar</div>
+      </div>
+
+      <div class="system-card" draggable="true" onclick="handleSystemClick('PRO0033','Agentic AI')">
+        <div class="card-header">
+          <span class="system-id">PRO0033</span>
+          <span class="system-status">ONGOING</span>
+        </div>
+        <div class="system-name">Agentic AI</div>
+        <div class="system-owner">Pradhumn Kumar</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const grid = document.getElementById("systemsGrid");
+    let draggedItem = null;
+    let placeholder = document.createElement("div");
+    placeholder.classList.add("placeholder");
+
+    grid.addEventListener("dragstart", (e) => {
+      if (e.target.classList.contains("system-card")) {
+        draggedItem = e.target;
+        e.target.classList.add("dragging");
+        setTimeout(() => {
+          e.target.style.display = "none";
+        }, 0);
+      }
+    });
+
+    grid.addEventListener("dragend", (e) => {
+      e.target.classList.remove("dragging");
+      e.target.style.display = "block";
+      placeholder.remove();
+      draggedItem = null;
+    });
+
+    grid.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const afterElement = getDragAfterElement(grid, e.clientY);
+
+      if (afterElement == null) {
+        grid.appendChild(placeholder);
+      } else {
+        grid.insertBefore(placeholder, afterElement);
+      }
+    });
+
+    grid.addEventListener("drop", () => {
+      if (draggedItem && placeholder) {
+        grid.insertBefore(draggedItem, placeholder);
+      }
+    });
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll(".system-card:not(.dragging)")];
+
+      return draggableElements.reduce(
+        (closest, child) => {
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+          } else {
+            return closest;
+          }
+        },
+        { offset: Number.NEGATIVE_INFINITY }
+      ).element;
+    }
+
+    function handleSystemClick(systemId, systemName) {
+      alert(`Clicked on ${systemName} (${systemId})`);
+    }
+  </script>
+</body>
+</html>
